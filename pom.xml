@@ -61,7 +61,46 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.7.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+
     </dependencies>
+
+    <!-- Deploy to Nexus -->
+    <distributionManagement>
+        <repository>
+            <id>devops-backend-releases</id> <!-- Utilise l'ID correct -->
+            <name>Nexus Release Repository</name>
+            <url>http://localhost:8081/repository/devops-backend/</url>
+        </repository>
+        <snapshotRepository>
+            <id>devops-backend-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://localhost:8081/repository/devops-backend/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 
     <build>
         <plugins>
@@ -85,6 +124,39 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
+
+            <!-- JaCoCo Plugin -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <!-- Active l'agent JaCoCo pendant les tests -->
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Génère le rapport après les tests -->
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- (Optionnel) Plugin Surefire pour exécuter les tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+
         </plugins>
     </build>
 
