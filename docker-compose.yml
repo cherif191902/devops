@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mysql:
+     image: mysql:8.0
+     container_name: mysql
+     environment:
+       MYSQL_ROOT_PASSWORD: "cindaa123."
+       MYSQL_DATABASE: adoptionProject
+     ports:
+       - "3307:3306"
+     volumes:
+       - mysql-data:/var/lib/mysql
+     networks:
+       - monitoring
+     healthcheck:
+       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+       interval: 10s
+       timeout: 5s
+       retries: 5
+
+  backend:
+    build: ./devops
+    image: devops-backend
+    container_name: backend
+    ports:
+      - "8089:8089"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/adoptionProject?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: "cindaa123."
+      SERVER_PORT: "8089"
+      SERVER_SERVLET_CONTEXT_PATH: "/adoption"
+    networks:
+      - monitoring
+
+  
+ 
+
+volumes:
+  mysql-data:
+
+networks:
+  monitoring:
+    driver: bridge
+
+
