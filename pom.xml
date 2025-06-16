@@ -89,13 +89,13 @@
 
     <!-- Deploy to Nexus -->
     <distributionManagement>
-        <repository>
-            <id>devops-backend-releases</id> <!-- Utilise l'ID correct -->
-            <name>Nexus Release Repository</name>
-            <url>http://localhost:8081/repository/devops-backend/</url>
-        </repository>
+            <repository>
+                <id>devops-backend</id> <!-- Doit correspondre à settings.xml -->
+                <name>Nexus Release Repository</name>
+                <url>http://localhost:8081/repository/devops-backend/</url>
+            </repository>
         <snapshotRepository>
-            <id>devops-backend-snapshots</id>
+            <id>devops-backend</id>
             <name>Nexus Snapshot Repository</name>
             <url>http://localhost:8081/repository/devops-backend/</url>
         </snapshotRepository>
